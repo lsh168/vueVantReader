@@ -41,6 +41,12 @@ Vue.use(Tabs)
 
 引入路由
   npm install --save vue-router
-  
 
+配置，动态设置px
+  npm i amfe-flexible   用于设置rem基准值
+  导入import ‘amfe-flexible’
+  
+  px转换rem   开发过程中的工具
+$ npm install postcss postcss-pxtorem@5.1.1 --save-dev
+ 根目录创建文件进行配置
 

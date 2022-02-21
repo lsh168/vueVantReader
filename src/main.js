@@ -11,6 +11,8 @@ import './styles/index.less'
 
 import Vant from 'vant';
 import 'vant/lib/index.css';
+// 动态调整大小px
+import 'amfe-flexible'
 
 Vue.use(Vant);
 Vue.use(ElementUI);
