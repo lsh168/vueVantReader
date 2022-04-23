@@ -15,6 +15,12 @@ import store from './store';
 import 'vant/lib/index.css';
 // 动态调整大小px
 import 'amfe-flexible'
+// 引入阅读器字体图标
+import './assets/styles/icon.css'
+// 引入阅读器全局样式文件
+// import './assets/styles/global.scss'
+
+import './mock'
 
 Vue.use(Vant);
 // Vue.use(ElementUI);

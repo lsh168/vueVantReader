@@ -9,11 +9,15 @@
         <i slot="icon" class="reader reader-shouye"></i>
         <span class="text">首页</span>
       </van-tabbar-item>
+      <van-tabbar-item to="/piazza">
+        <i slot="icon" class="reader reader-shouye"></i>
+        <span class="text">广场</span>
+      </van-tabbar-item>
       <van-tabbar-item to="/my">
         <i slot="icon" class="reader reader-wode"></i>
         <span class="text">{{ $store.state.user ? '我的':'未登录'  }}</span>
       </van-tabbar-item>
-      
+
     </van-tabbar>
   </div>
 </template>
@@ -34,6 +38,7 @@ export default {
 </script>
 <style scoped lang="less">
 .layout-container{
+  z-index: 200;
   .layout-tabbar{
     i.reader{
       font-size: 40px;

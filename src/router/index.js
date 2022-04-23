@@ -23,12 +23,17 @@ export default new Router({
           component:() =>import('@/pages/Home')
         },
         {
+          path:'/piazza',
+          name:'piazza',
+          component:() =>import('@/pages/Piazza')
+        },
+        {
           path:'/my',//默认子路由
           name:'My',
           component:() =>import('@/pages/My')
         },
-        
-        
+
+
       ]
 
     },
@@ -53,12 +58,24 @@ export default new Router({
       // props:true
 
     },
-    
+    {
+      path:'/ebook',
+      name:'ebook',
+      // 懒加载
+      component: () => import ('@/pages/EBook'),
+      children:[
+        {
+          path: ':fileName',
+          component: () => import ('@/components/ebook/EBookReader'),
+        }
+      ]
+    },
+
     // {
     //   path:'/registe',
     //   component:Registe
     // },
-    
+
 
   ]
 })

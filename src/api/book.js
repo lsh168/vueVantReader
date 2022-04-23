@@ -49,3 +49,12 @@ export const getReadState = params =>{
     params
   })
 }
+
+// 查询热门图书
+export const selectHotBooks = params =>{
+  return request({
+    method:'POST',
+    url:`/book/selectHotBooks`,
+    params
+  })
+}
