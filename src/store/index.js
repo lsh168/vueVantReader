@@ -15,6 +15,7 @@ export default new Vuex.Store({
   state: {
     // 一个对象，存储当前用户登陆信息（token数据）
     user: getItem(TOKEN_KEY),
+    rankingBooks:[],
     // user:JSON.parse(window.localStorage.getItem(TOKEN_KEY))
     // book ------------
 
@@ -48,6 +49,7 @@ export default new Vuex.Store({
       setItem(TOKEN_KEY, state.user)
       // window.localStorage.setItem(TOKEN_KEY,JSON.stringify(state.user))
     },
+    
     // book----------------
     'SET_FILENAME': (state, fileName) => {
       state.fileName = fileName

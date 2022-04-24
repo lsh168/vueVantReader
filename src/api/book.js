@@ -58,3 +58,11 @@ export const selectHotBooks = params =>{
     params
   })
 }
+// rankingBooks
+// 查询热门图书
+export const rankingBooks = () =>{
+  return request({
+    method:'POST',
+    url:`/book/rankingBooks`
+  })
+}

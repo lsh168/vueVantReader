@@ -1,17 +1,61 @@
 <template>
   <div class="category">
-    <title-view label="排行榜" btn="查看全部" @onClick="showBookList"></title-view>
+    <title-view
+      label="读书榜单"
+    ></title-view>
     <div class="category-list">
-      <div class="category-item-wrapper" v-for="(item, index) in data" :key="index" @click="showBookCategory(item)">
+      <div class="category-item-wrapper" @click="showHeightScoreBooks()">
         <div class="category-item">
           <div class="content-wrapper">
-            <div class="title title-medium">{{item.orderText}}</div>
-            <div class="num sub-title-tiny">2本书</div>
+            <div class="title title-medium">高分榜单</div>
+            <div class="num sub-title-tiny">{{data.heightScoreBooks.length}}本书</div>
           </div>
           <div class="img-wrapper">
             <div class="img-group">
-              <img class="img" :src="item.imgs[0]">
-              <img class="img2" :src="item.imgs[1]">
+              <img class="img" :src="data.heightScoreBooks[0].cover" />
+              <img class="img2" :src="data.heightScoreBooks[1].cover" />
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="category-item-wrapper" @click="showHotBooks()">
+        <div class="category-item">
+          <div class="content-wrapper">
+            <div class="title title-medium">人气榜单</div>
+            <div class="num sub-title-tiny">{{data.hotBooks.length}}本书</div>
+          </div>
+          <div class="img-wrapper">
+            <div class="img-group">
+              <img class="img" :src="data.hotBooks[0].cover" />
+              <img class="img2" :src="data.hotBooks[1].cover" />
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="category-item-wrapper" @click="showMonthBooks()">
+        <div class="category-item">
+          <div class="content-wrapper">
+            <div class="title title-medium">本月读书榜单</div>
+            <div class="num sub-title-tiny">{{data.monthBooks.length}}本书</div>
+          </div>
+          <div class="img-wrapper">
+            <div class="img-group">
+              <img class="img" :src="data.monthBooks[0].cover" />
+              <img class="img2" :src="data.monthBooks[1].cover" />
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="category-item-wrapper" @click="showYearBooks()">
+        <div class="category-item">
+          <div class="content-wrapper">
+            <div class="title title-medium">年度读书榜单</div>
+            <div class="num sub-title-tiny">{{data.yearBooks.length}}本书</div>
+          </div>
+          <div class="img-wrapper">
+            <div class="img-group">
+              <img class="img" :src="data.yearBooks[2].cover" />
+              <img class="img2" :src="data.yearBooks[3].cover" />
             </div>
           </div>
         </div>
@@ -21,109 +65,137 @@
 </template>
 
 <script type="text/ecmascript-6">
-  import TitleView from '@/components/home/title'
-  // import { categoryText, getCategoryName } from '@/utils/book'
+import TitleView from "@/components/home/title";
+// import { categoryText, getCategoryName } from '@/utils/book'
 
-  export default {
-    components: {
-      TitleView
+export default {
+  components: {
+    TitleView,
+  },
+  data() {
+    return {
+    };
+  },
+  props: {
+    data: [Array,Object],
+  },
+  mounted(){
+    console.log(this.data.monthBooks);
+  },
+  methods: {
+    showHeightScoreBooks(){
+      this.$router.push({
+        // path: "/ranking",
+        name:'ranking',
+        params: {
+          text:'高分榜单',
+          books:this.data.heightScoreBooks
+        },
+      });
     },
-    data(){
-      return {
-        categoryText:['高分排行榜','人气排行榜']
-      }
+    showHotBooks(){
+      this.$router.push({
+        path: "/ranking",
+        query: {
+          text:'人气榜单',
+          books:this.data.hotBooks
+          // category: getCategoryName(item.category),
+          // categoryText: this.categoryText(item.category)
+        },
+      });
     },
-    props: {
-      data: Array
+    showMonthBooks(){
+      this.$router.push({
+        path: "/ranking",
+        query: {
+          text:'本月读书榜单',
+          books:this.data.monthBooks
+          // category: getCategoryName(item.category),
+          // categoryText: this.categoryText(item.category)
+        },
+      });
     },
-    methods: {
-      showBookCategory(item) {
-        console.log(item)
-        this.$router.push({
-          path: '/book-store/list',
-          query: {
-            // category: getCategoryName(item.category),
-            // categoryText: this.categoryText(item.category)
-          }
-        })
-      },
-      // categoryText(category) {
-      //   console.log(category)
-      //   // return categoryText(category, this)
-      // },
-      showBookList() {
-        this.$router.push('/book-store/list')
-      }
-    }
-  }
+    showYearBooks(){
+      this.$router.push({
+        path: "/ranking",
+        query: {
+          text:'年度读书榜单',
+          books:this.data.yearBooks
+          // category: getCategoryName(item.category),
+          // categoryText: this.categoryText(item.category)
+        },
+      });
+    },
+  },
+};
 </script>
 
 <style lang="scss" rel="stylesheet/scss" scoped>
-  @import "../../assets/styles/global";
+@import "../../assets/styles/global";
 
-  .category {
-    background: #fff;
-    .category-list {
-      display: flex;
-      flex-flow: row wrap;
-      width: 100%;
-      .category-item-wrapper {
-        flex: 0 0 50%;
-        width: 50%;
-        padding: 0 px2rem(5) px2rem(10) px2rem(5);
-        box-sizing: border-box;
-        &:nth-child(odd) {
-          padding-left: px2rem(10);
-        }
-        &:nth-child(even) {
-          padding-right: px2rem(10);
-        }
-        .category-item {
-          display: flex;
-          width: 100%;
-          background: #eee;
-          .img-wrapper {
-            flex: 0 0 50%;
-            width: 50%;
-            padding: px2rem(20) px2rem(10);
-            box-sizing: border-box;
-            .img-group {
-              position: relative;
-              width: 100%;
+.category {
+  background: #fff;
+  .category-list {
+    display: flex;
+    flex-flow: row wrap;
+    width: 100%;
+    .category-item-wrapper {
+      flex: 0 0 50%;
+      width: 50%;
+      padding: 0 px2rem(5) px2rem(10) px2rem(5);
+      box-sizing: border-box;
+      &:nth-child(odd) {
+        padding-left: px2rem(10);
+      }
+      &:nth-child(even) {
+        padding-right: px2rem(10);
+      }
+      .category-item {
+        display: flex;
+        width: 100%;
+        background: #eee;
+        .img-wrapper {
+          flex: 0 0 50%;
+          width: 50%;
+          padding: px2rem(20) px2rem(10);
+          box-sizing: border-box;
+          .img-group {
+            position: relative;
+            width: 100%;
+            height: px2rem(60);
+            @include left;
+            .img {
+              position: absolute;
+              left: 0;
+              top: 0;
+              z-index: 100;
+              width: px2rem(45);
               height: px2rem(60);
-              @include left;
-              .img {
-                position: absolute;
-                left: 0;
-                top: 0;
-                z-index: 100;
-                width: px2rem(45);
-                height: px2rem(60);
-              }
-              .img2 {
-                position: absolute;
-                left: px2rem(30);
-                top: px2rem(7.5);
-                z-index: 99;
-                width: px2rem(30);
-                height: px2rem(45);
-              }
+            }
+            .img2 {
+              position: absolute;
+              left: px2rem(30);
+              top: px2rem(7.5);
+              z-index: 99;
+              width: px2rem(30);
+              height: px2rem(45);
             }
           }
-          .content-wrapper {
-            flex: 0 0 50%;
-            width: 50%;
-            @include columnCenter;
-            .title {
-              text-align: center;
-            }
-            .num {
-              text-align: center;
-              margin-top: px2rem(5);
-            }
+        }
+        .content-wrapper {
+          flex: 0 0 50%;
+          width: 50%;
+          @include columnCenter;
+          .title {
+            text-align: center;
+          }
+          .num {
+            text-align: center;
+            margin-top: px2rem(5);
           }
         }
       }
     }
   }
+}
 </style>

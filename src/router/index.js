@@ -59,6 +59,14 @@ export default new Router({
 
     },
     {
+      path:'/ranking',
+      name:'ranking',
+      component: ()=>import('@/pages/Ranking'),
+      // 开启props接收参数，传参
+      // props:true
+
+    },
+    {
       path:'/ebook',
       name:'ebook',
       // 懒加载

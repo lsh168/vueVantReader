@@ -31,39 +31,38 @@
       </van-swipe-item>
     </van-swipe>
     <Recommend :data="books"></Recommend>
-    <category :data="orderBooks"></category>
-    <category-book></category-book>
+    <category :data="rankingBooks"></category>
+    <!-- <category-book></category-book> -->
   </div>
 </template>
 
 <script>
 import Recommend from "@/components/home/recommend";
 import Category from "@/components/home/category";
-import CategoryBook from "@/components/home/categoryBook";
-import { getBooks, selectHotBooks } from "@/api/book";
+// import CategoryBook from "@/components/home/categoryBook";
+import { getBooks, selectHotBooks,rankingBooks } from "@/api/book";
 
 
 export default {
   name: "Piazza",
   data() {
     return {
-      books: [],
-      orderBooks:[
-        {
-          orderText:'高分排行榜',
-          imgs:['https://img01.yzcdn.cn/vant/cat.jpeg','https://img01.yzcdn.cn/vant/cat.jpeg']},
-        {
-          orderText:'年度排行榜',
-          imgs:['https://img01.yzcdn.cn/vant/cat.jpeg','https://img01.yzcdn.cn/vant/cat.jpeg']}
-      ]
+      books: [],//热门推荐
+      rankingBooks:{},//排行榜
     };
   },
   components: {
     Recommend,
     Category,
-    CategoryBook,
+    // CategoryBook,
   },
   methods: {
+    async getRankingBooks(){
+      const { data }=await rankingBooks()
+      this.rankingBooks=data.data
+
+      console.log(this.rankingBooks);
+    },
     async toSelectHotBooks() {
       try {
         const { data } = await selectHotBooks();
@@ -84,6 +83,7 @@ export default {
   },
   mounted() {
     this.toSelectHotBooks();
+    this.getRankingBooks();
   },
 };
 </script>
