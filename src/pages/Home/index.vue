@@ -69,9 +69,7 @@
 import { getCategoryList } from "@/api/book";
 import BookList from "@/components/bookList/BookList";
 import ChannelEdit from "@/components/channelEdit/ChannelEdit";
-// import Filter from '../../components/filter/filter';
-// import FilterA from '../../components/filter/filter-a.vue';
-// import FilterBar from '../../components/filter/filter-bar.vue';
+
 export default {
   name: "Home",
   components: {

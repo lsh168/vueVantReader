@@ -67,17 +67,23 @@ export default new Router({
 
     },
     {
-      path:'/ebook',
-      name:'ebook',
-      // 懒加载
-      component: () => import ('@/pages/EBook'),
-      children:[
-        {
-          path: ':fileName',
-          component: () => import ('@/components/ebook/EBookReader'),
-        }
-      ]
+      path:'/recommend',
+      name:'recommend',
+      component: ()=>import('@/pages/Recommend'),
     },
+
+    // {
+    //   path:'/ebook',
+    //   name:'ebook',
+    //   // 懒加载
+    //   component: () => import ('@/pages/EBook'),
+    //   children:[
+    //     {
+    //       path: ':fileName',
+    //       component: () => import ('@/components/ebook/EBookReader'),
+    //     }
+    //   ]
+    // },
 
     // {
     //   path:'/registe',

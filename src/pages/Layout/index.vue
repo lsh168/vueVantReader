@@ -11,7 +11,9 @@
       </van-tabbar-item>
       <van-tabbar-item to="/piazza">
         <i slot="icon" class="reader reader-shouye"></i>
-        <span class="text">广场</span>
+        <!-- <i slot="icon" class="bar-chart-o"></i> -->
+        <!-- <van-icon name="bar-chart-o" /> -->
+        <span class="text">排行榜</span>
       </van-tabbar-item>
       <van-tabbar-item to="/my">
         <i slot="icon" class="reader reader-wode"></i>
@@ -40,6 +42,7 @@ export default {
 .layout-container{
   z-index: 200;
   .layout-tabbar{
+    z-index: 500;
     i.reader{
       font-size: 40px;
     }

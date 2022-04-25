@@ -54,8 +54,8 @@
           </div>
           <div class="img-wrapper">
             <div class="img-group">
-              <img class="img" :src="data.yearBooks[2].cover" />
-              <img class="img2" :src="data.yearBooks[3].cover" />
+              <img class="img" :src="data.yearBooks[0].cover" />
+              <img class="img2" :src="data.yearBooks[1].cover" />
             </div>
           </div>
         </div>
@@ -80,7 +80,6 @@ export default {
     data: [Array,Object],
   },
   mounted(){
-    console.log(this.data.monthBooks);
   },
   methods: {
     showHeightScoreBooks(){
@@ -92,39 +91,48 @@ export default {
           books:this.data.heightScoreBooks
         },
       });
+      this.$store.commit('SET_RankingBooks',this.data.heightScoreBooks)
+      this.$store.commit('SET_RankingText','高分榜单')
     },
     showHotBooks(){
       this.$router.push({
         path: "/ranking",
-        query: {
+        params: {
           text:'人气榜单',
           books:this.data.hotBooks
           // category: getCategoryName(item.category),
           // categoryText: this.categoryText(item.category)
         },
       });
+      this.$store.commit('SET_RankingBooks',this.data.hotBooks)
+      this.$store.commit('SET_RankingText','人气榜单')
     },
     showMonthBooks(){
       this.$router.push({
         path: "/ranking",
-        query: {
+        params: {
           text:'本月读书榜单',
           books:this.data.monthBooks
           // category: getCategoryName(item.category),
           // categoryText: this.categoryText(item.category)
         },
       });
+      this.$store.commit('SET_RankingBooks',this.data.monthBooks)
+      this.$store.commit('SET_RankingText','本月读书榜单')
     },
     showYearBooks(){
       this.$router.push({
         path: "/ranking",
-        query: {
+        // 此处用query传参有问题，出现字符串‘object’，推断：query传参会放到网址链接中，参数过大解析有问题。params不会出现在导航栏中，可以传大参数
+        params: {
           text:'年度读书榜单',
           books:this.data.yearBooks
           // category: getCategoryName(item.category),
           // categoryText: this.categoryText(item.category)
         },
       });
+      this.$store.commit('SET_RankingBooks',this.data.yearBooks)
+      this.$store.commit('SET_RankingText','年度读书榜单')
     },
   },
 };
@@ -168,7 +176,7 @@ export default {
               position: absolute;
               left: 0;
               top: 0;
-              z-index: 100;
+              z-index: 2;
               width: px2rem(45);
               height: px2rem(60);
             }
@@ -176,7 +184,7 @@ export default {
               position: absolute;
               left: px2rem(30);
               top: px2rem(7.5);
-              z-index: 99;
+              z-index: 1;
               width: px2rem(30);
               height: px2rem(45);
             }

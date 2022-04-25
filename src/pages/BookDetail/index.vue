@@ -3,7 +3,7 @@
     <!-- 顶部导航 -->
     <van-nav-bar
       class="page-nav-bar"
-      title="书评"
+      title="图书"
       left-arrow
       @click-left="onClickLeft"
       fixed
@@ -52,6 +52,19 @@
         </van-row>
         <!-- 评分组件 -->
         <star-rate :bookDetail="bookDetail" />
+        <!-- 购买图书 -->
+        <div class="toBuyBook">
+          <van-cell-group inset>
+            <van-cell
+              class="van-ellipsis"
+              :title="bookDetail.bookName"
+              is-link
+              url="http://search.m.dangdang.com/search.php?keyword=%E4%B8%89%E4%BD%93"
+              value="去购买"
+              :label="bookDetail.subTitle"
+            />
+          </van-cell-group>
+        </div>
 
         <!-- 简介 -->
         <div>
@@ -230,16 +243,16 @@ export default {
           bookId: this.id,
           readState: this.readState,
         });
-        if (this.readState===1) {
-          this.$toast.success("想读")
-        } 
-        if (this.readState===2) {
-          this.$toast.success("在读")
+        if (this.readState === 1) {
+          this.$toast.success("想读");
+        }
+        if (this.readState === 2) {
+          this.$toast.success("在读");
         } else {
-          this.$toast.success("读过")
+          this.$toast.success("读过");
         }
       } catch (error) {
-        this.$toast.fail("更新阅读状态错误",error);
+        this.$toast.fail("更新阅读状态错误", error);
       }
     },
     //跳到评论区域
@@ -308,6 +321,9 @@ export default {
   .main-wrap {
     margin-top: 102px;
     .main-detail {
+      .toBuyBook{
+        padding-bottom: 18px;
+      }
       .picInfo {
         margin: 24px 0;
         font-size: 40px;
@@ -335,8 +351,8 @@ export default {
           }
         }
       }
-      .book-detail-content{
-        padding:0 25px ;
+      .book-detail-content {
+        padding: 0 25px;
       }
     }
     .book-detail-bottom {

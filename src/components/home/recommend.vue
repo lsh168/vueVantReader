@@ -1,6 +1,6 @@
 <template>
   <div class="recommend">
-    <title-view label="热门推荐" btn="查看全部"></title-view>
+    <title-view label="热门推荐" btn="查看全部" @onClick="click()"></title-view>
     <div class="recommend-list">
       <div
         class="recommend-item"
@@ -40,6 +40,25 @@ export default {
   props: {
     data: Array,
   },
+  methods:{
+    click(){
+      this.$router.push({
+        // path: "/ranking",
+        name: 'recommend',
+      });
+    },
+    showBookDetail(item){
+      this.$router.push({
+        // path: "/ranking",
+        name: 'bookDetail',
+        params: {
+          id: item.bookId,
+        },
+      });
+    },
+
+    
+  }
 };
 </script>
 

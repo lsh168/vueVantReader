@@ -6,7 +6,7 @@
     :error="error"
     error-text="评论加载失败，刷新重试！"
   >
-  <van-cell title="书籍评论"/>
+  <van-cell title="评论广场"/>
     <comment-item
       v-for="evaluation in evaluationList"
       :key="evaluation.evaluationId"

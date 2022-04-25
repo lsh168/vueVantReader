@@ -3,14 +3,14 @@
     <van-nav-bar
       fixed
       class="page-nav-bar"
-      :title="text"
+      :title="rankingText"
       left-text="返回"
       left-arrow
       @click-left="onClickLeft"
     />
     <div class="bookList">
       <van-card
-        v-for="(item, index) in books"
+        v-for="(item, index) in rankingBooks"
         :key="index"
         :tag="'TOP' + (index + 1)"
         :desc="item.subTitle"
@@ -40,17 +40,25 @@
 
 <script>
 // import CategoryBook from "@/components/home/categoryBook";
+import { mapState } from "vuex";
 export default {
   components: {
     // CategoryBook
   },
   data() {
     return {
+      // rankingBooks:{
+      //   text: this.$route.params.text,
+      // books: this.$route.params.books,
+      // },
       text: this.$route.params.text,
       books: this.$route.params.books,
     };
   },
-  computed: {},
+  computed: {
+    // 从容器里拿数据
+    ...mapState(["rankingBooks", "rankingText"]),
+  },
   methods: {
     onClickLeft() {
       this.$router.back();
@@ -60,10 +68,26 @@ export default {
         name: "bookDetail",
         params: { id: bookId },
       });
+      //   this.$store.commit('SET_RankingBooks',this.books)
+      // this.$store.commit('SET_RankingText',this.text)
     },
   },
-  created() {},
+  created() {
+    // // 确认退出，清楚状态（容器中的user+本地存储）
+    // this.$store.commit('SET_RankingBooks',this.books)
+    
+    // if (!this.books || !this.text) {
+    //   this.books=this.rankingBooks
+    //   this.text=this.rankingText
+    //   // this.$store.commit("SET_RankingBooks", this.$route.params.books);
+    //   // this.$store.commit("SET_RankingText", this.$route.params.text);
+    // }
+
+  },
   mounted() {
+    // 确认退出，清楚状态（容器中的user+本地存储）
+    // this.$store.commit('SET_RankingBooks',this.$route.params.books)
+    // this.$store.commit('SET_RankingText',this.$route.params.text)
   },
 };
 </script>

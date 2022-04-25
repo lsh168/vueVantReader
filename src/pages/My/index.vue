@@ -1,15 +1,22 @@
 <template>
   <div class="my-container">
+    <!-- 导航栏 -->
+    <van-nav-bar
+      class="page-nav-bar"
+      fixed
+      title="个人中心"
+      @click-left="onClickLeft"
+    >
+      <template #left>
+        <van-icon name="wap-nav" size="18" />
+      </template>
+    </van-nav-bar>
+
     <div v-if="user" class="header user-info">
       <div class="base-info">
         <div class="left">
-          <van-image
-            class="avatar"
-            fit="cover"
-            round
-            :src="userInfo.avatar"
-          />
-          <span class="name">{{userInfo.nickName}}</span>
+          <van-image class="avatar" fit="cover" round :src="userInfo.avatar" />
+          <span class="name">{{ userInfo.nickName }}</span>
         </div>
         <div class="right">
           <van-button size="mini" to="/user/profile" round>编辑资料</van-button>
@@ -40,8 +47,19 @@
         <span class="text">登录/注册</span>
       </div>
     </div>
+    <!-- 在读、想读、读过 -->
+    <van-tabs v-model="active" scrollspy sticky>
+      <van-tab v-for="index in 4" :key="index" :title="'选项 ' + index">
+        内容 {{ index }}
+      </van-tab>
+      <van-tab title="在读">在读</van-tab>
+      <van-tab title="想读">想读</van-tab>
+      <van-tab title="读过">读过</van-tab>
+      <van-tab title="点赞">点赞</van-tab>
+      <van-tab title="评论">评论</van-tab>
+    </van-tabs>
 
-    <van-cell title="URL 跳转" is-link />
+    <!-- <van-cell title="URL 跳转" is-link /> -->
     <van-cell
       v-if="user"
       class="logout-cell"
@@ -50,19 +68,40 @@
       clickable
       is-link
     />
+
+    <van-popup
+      v-model="show"
+      position="left"
+      closeable
+      :style="{ height: '100%', width: '60%' }"
+    >
+      <div class="user-info-popup">
+        <van-cell title="URL 跳转" is-link />
+        <van-cell
+          v-if="user"
+          class="logout-cell"
+          @click="onLogout"
+          title="退出登录"
+          clickable
+          is-link
+        />
+      </div>
+    </van-popup>
   </div>
 </template>
 
 <script>
 // 从容器里拿数据
 import { mapState } from "vuex";
-import { getUserInfo } from '@/api/user.js'
+import { getUserInfo } from "@/api/user.js";
 
 export default {
   name: "My",
   data() {
     return {
-      userInfo:{}
+      userInfo: {},
+      show: false,
+      active: 2, //粘性tab激活的值
     };
   },
   computed: {
@@ -70,26 +109,31 @@ export default {
     ...mapState(["user"]),
   },
   methods: {
-    async loadingUserInfo(){
-      const { data } =await getUserInfo()
+    onClickLeft() {
+      this.show = true;
+    },
+    async loadingUserInfo() {
+      try {
+        const { data } = await getUserInfo();
 
-      this.userInfo=data.data
-      console.log(this.userInfo);
-
+        this.userInfo = data.data;
+        console.log(this.userInfo);
+      } catch (error) {
+        this.$toast.fail("获取用户信息失败，请稍后重试！");
+      }
     },
 
-
     onLogout() {
-      this.$dialog.confirm({
-        title: "确认退出嘛？",
-        message: "弹窗内容",
-      })
+      this.$dialog
+        .confirm({
+          title: "确认退出嘛？",
+          message: "弹窗内容",
+        })
         .then(() => {
           // on confirm
           console.log("确认");
           // 确认退出，清楚状态（容器中的user+本地存储）
-          this.$store.commit('setUser',null)
-
+          this.$store.commit("setUser", null);
         })
         .catch(() => {
           // on cancel
@@ -98,20 +142,25 @@ export default {
     },
   },
   created() {
-    this.loadingUserInfo()
+    this.loadingUserInfo();
     // if(this.user){
     //   // api加载
     // }
+    if (!this.user) {
+      this.$store.commit("setUser", null);
+    }
   },
   mounted() {},
 };
 </script>
 <style scoped lang="less">
 .my-container {
+  padding-bottom: 95px;
+  padding-top: 93px;
   .header {
     height: 361px;
-    background-color: rgb(24, 190, 231);
-    // background-image: url("~@/assets/img.jpg");
+    // background-color: rgb(24, 190, 231);
+    background-image: url("~@/assets/img.webp");
     // background-size: cover;
   }
   .not-login {
@@ -179,6 +228,9 @@ export default {
         }
       }
     }
+  }
+  .user-info-popup {
+    padding-top: 25%;
   }
 }
 </style>

@@ -109,7 +109,7 @@ export default {
   .van-divider{
     margin: 10px;
   }
-  margin-bottom: 30px;
+  margin-bottom: 18px;
   .leftStar {
     h1 {
       text-align: center;
