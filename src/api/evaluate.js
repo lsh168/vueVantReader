@@ -7,3 +7,16 @@ export const scoreStatistics= params => {
     params
   })
 }
+export const selectByMember= () => {
+  return request({
+    url: '/evaluation/selectByMember',
+    method: 'POST',
+  })
+}
+export const deleteEvaluation= params => {
+  return request({
+    url: '/evaluation/deleteEvaluation',
+    method: 'POST',
+    params
+  })
+}

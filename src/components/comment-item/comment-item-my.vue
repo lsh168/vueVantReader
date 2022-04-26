@@ -5,11 +5,11 @@
       slot="icon"
       round
       fit="cover"
-      src="https://img01.yzcdn.cn/vant/cat.jpeg"
+      :src="user.avatar"
     />
     <div slot="title" class="title-wrap">
       <div class="user-name">
-        {{ evaluation.member.nickname }}
+        {{ user.nickName }}
         <van-rate
           v-model="evaluation.score"
           :size="10"
@@ -21,11 +21,10 @@
       </div>
       <van-button
         class="like-btn"
-        :icon="isLiking ? 'good-job' : 'good-job-o'"
-        @click="clickEnjoy"
-        :disabled="isLiking"
-        >{{ evaluation.enjoy > 0 ? evaluation.enjoy : "赞" }}</van-button
+        @click="toDeleteEvaluation(evaluation.evaluationId)"
+        >删除</van-button
       >
+      <!-- <van-icon name="ellipsis" /> -->
     </div>
     <div slot="label">
       <p class="comment-content">{{ evaluation.content }}</p>
@@ -40,11 +39,10 @@
 </template>
 
 <script>
-import { addEnjoy } from "@/api/user.js";
+import { deleteEvaluation } from "@/api/evaluate"
 export default {
   data() {
     return {
-      isLiking: false,
     };
   },
   props: {
@@ -52,18 +50,19 @@ export default {
       type: Object,
       required: true,
     },
+    user: {
+      type: Object,
+      required: true,
+    },
   },
   computed: {},
   methods: {
-    async clickEnjoy() {
-      const { data } = await addEnjoy({
-        evaluationId: this.evaluation.evaluationId,
-      });
-      this.evaluation.enjoy++;
-      this.isLiking = true;
+    async toDeleteEvaluation(evaluationId){
+      const {data} = await deleteEvaluation({id:evaluationId})
+      this.$emit("reLoadingEvaluation")
       console.log(data);
-      console.log(this.evaluation);
-    },
+
+    }
   },
   created() {},
   mounted() {},
@@ -108,8 +107,9 @@ export default {
     color: #222;
   }
   .like-btn {
+    font-size: 30px;
     height: 30px;
-    width: 60px;
+    width: 120px;
     border: 0;
   }
 }

@@ -66,3 +66,11 @@ export const rankingBooks = () =>{
     url:`/book/rankingBooks`
   })
 }
+// 通过用户查询阅读状态
+export const selectReadStateByUser = (query) =>{
+  return request({
+    method:'POST',
+    url:`/book/selectReadStateByUser`,
+    params:query,
+  })
+}

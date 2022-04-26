@@ -24,20 +24,20 @@
       </div>
       <div class="data-stats">
         <div class="data-item">
-          <span class="count">10</span>
-          <span class="text">haha</span>
+          <span class="count">{{toReadBooks.length}}</span>
+          <span class="text">想读</span>
         </div>
         <div class="data-item">
-          <span class="count">10</span>
-          <span class="text">haha</span>
+          <span class="count">{{readingBooks.length}}</span>
+          <span class="text">在读</span>
         </div>
         <div class="data-item">
-          <span class="count">10</span>
-          <span class="text">haha</span>
+          <span class="count">{{readBooks.length}}</span>
+          <span class="text">读过</span>
         </div>
         <div class="data-item">
-          <span class="count">10</span>
-          <span class="text">haha</span>
+          <span class="count">{{evaluation.length}}</span>
+          <span class="text">评论</span>
         </div>
       </div>
     </div>
@@ -48,15 +48,71 @@
       </div>
     </div>
     <!-- 在读、想读、读过 -->
-    <van-tabs v-model="active" scrollspy sticky>
-      <van-tab v-for="index in 4" :key="index" :title="'选项 ' + index">
-        内容 {{ index }}
+    <van-tabs class="menu-read" v-model="active" scrollspy sticky>
+      <van-tab title="想读">
+        <van-cell title="我想读的书"  />
+        <div 
+          class="read-item"
+          v-for="(item, index) in toReadBooks"
+          :key="index"
+          @click="clickToBookDetail(item)"
+        >
+          <div><img :src="item.cover" alt="" width="60px" height="80px" /></div>
+          <div class="read-text">
+            <span>{{ item.bookName }}</span
+            ><br />
+            <span class="text-color">{{ item.author }}</span
+            ><br />
+            <span class="text-color">{{ item.subTitle }}</span>
+          </div>
+        </div></van-tab>
+      <van-tab title="在读">
+        <van-cell title="我在读的书"  />
+        <div
+          class="read-item"
+          v-for="(item, index) in readingBooks"
+          :key="index"
+          @click="clickToBookDetail(item)"
+        >
+          <div><img :src="item.cover" alt="" width="60px" height="80px" /></div>
+          <div class="read-text">
+            <span>{{ item.bookName }}</span
+            ><br />
+            <span class="text-color">{{ item.author }}</span
+            ><br />
+            <span class="text-color">{{ item.subTitle }}</span>
+          </div>
+        </div>
       </van-tab>
-      <van-tab title="在读">在读</van-tab>
-      <van-tab title="想读">想读</van-tab>
-      <van-tab title="读过">读过</van-tab>
-      <van-tab title="点赞">点赞</van-tab>
-      <van-tab title="评论">评论</van-tab>
+      
+      <van-tab title="读过">
+        <van-cell title="我读过的书"  />
+        <div
+          class="read-item"
+          v-for="(item, index) in readBooks"
+          :key="index"
+          @click="clickToBookDetail(item)"
+        >
+          <div><img :src="item.cover" alt="" width="60px" height="80px" /></div>
+          <div class="read-text">
+            <span>{{ item.bookName }}</span
+            ><br />
+            <span class="text-color">{{ item.author }}</span
+            ><br />
+            <span class="text-color">{{ item.subTitle }}</span>
+          </div>
+        </div>
+      </van-tab>
+      <van-tab title="评论">
+        <van-cell title="我的评论"  />
+          <comment-item-my
+      v-for="item in evaluation"
+      :key="item.evaluationId"
+      :evaluation="item"
+      :user="userInfo"
+      @reLoadingEvaluation="toSelectByMember()"
+    />
+      </van-tab>
     </van-tabs>
 
     <!-- <van-cell title="URL 跳转" is-link /> -->
@@ -94,14 +150,27 @@
 // 从容器里拿数据
 import { mapState } from "vuex";
 import { getUserInfo } from "@/api/user.js";
+import { selectReadStateByUser } from "@/api/book";
+import { selectByMember } from "@/api/evaluate"
+import CommentItemMy from '../../components/comment-item/comment-item-my.vue';
 
 export default {
   name: "My",
+  components:{
+    CommentItemMy
+  },
   data() {
     return {
       userInfo: {},
       show: false,
       active: 2, //粘性tab激活的值
+      toRead: 1,
+      reading: 2,
+      read: 3,
+      toReadBooks: [],
+      readingBooks: [],
+      readBooks: [],
+      evaluation:[]
     };
   },
   computed: {
@@ -109,6 +178,25 @@ export default {
     ...mapState(["user"]),
   },
   methods: {
+    
+    clickToBookDetail(item){
+      this.$router.push({
+        // path: "/ranking",
+        name: 'bookDetail',
+        params: {
+          id: item.bookId,
+        },
+      });
+    },
+    async toSelectReadStateByUser() {
+      const rbs1 = await selectReadStateByUser({ readState: 2 });
+      this.readingBooks = rbs1.data.data;
+      const rbs2 = await selectReadStateByUser({ readState: 1 });
+      this.toReadBooks = rbs2.data.data;
+      const rbs3 = await selectReadStateByUser({ readState: 3 });
+      this.readBooks = rbs3.data.data;
+      
+    },
     onClickLeft() {
       this.show = true;
     },
@@ -134,11 +222,23 @@ export default {
           console.log("确认");
           // 确认退出，清楚状态（容器中的user+本地存储）
           this.$store.commit("setUser", null);
+          this.toReadBooks.splice(0,this.readingBooks.length)
+          this.readingBooks.splice(0,this.readingBooks.length)
+          this.readBooks.splice(0,this.readBooks.length)
+          this.evaluation.splice(0,this.evaluation.length)
+          
+
         })
         .catch(() => {
           // on cancel
           console.log("取消");
         });
+    },
+    // 查询短评
+    async toSelectByMember(){
+      const { data } = await selectByMember()
+      this.evaluation=data.data
+      console.log(this.evaluation);
     },
   },
   created() {
@@ -146,11 +246,14 @@ export default {
     // if(this.user){
     //   // api加载
     // }
-    if (!this.user) {
-      this.$store.commit("setUser", null);
-    }
+    // if (!this.user) {
+    //   this.$store.commit("setUser", null);
+    // }
   },
-  mounted() {},
+  mounted() {
+    this.toSelectReadStateByUser();
+    this.toSelectByMember()
+  },
 };
 </script>
 <style scoped lang="less">
@@ -184,6 +287,39 @@ export default {
       }
     }
   }
+  .menu-read {
+    background-color: #fff;
+    /deep/ .van-sticky--fixed {
+      top: 90px;
+
+      .van-tabs__wrap {
+        .van-tabs__line {
+          background-color: #3296fa;
+        }
+      }
+    }
+    /deep/ .van-sticky {
+      top: 90px;
+      .van-tabs__wrap {
+        .van-tabs__line {
+          background-color: #3296fa;
+        }
+      }
+    }
+    .read-item {
+      display: flex;
+      align-items: center;
+      margin: 16px 28px;
+      .read-text {
+        padding-left: 16px;
+        font-size: 32px;
+        .text-color {
+          color: rgb(133, 134, 134);
+        }
+      }
+    }
+  }
+
   .user-info {
     .base-info {
       height: 231px;
