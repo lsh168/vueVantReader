@@ -226,8 +226,6 @@ export default {
           this.readingBooks.splice(0,this.readingBooks.length)
           this.readBooks.splice(0,this.readBooks.length)
           this.evaluation.splice(0,this.evaluation.length)
-          
-
         })
         .catch(() => {
           // on cancel

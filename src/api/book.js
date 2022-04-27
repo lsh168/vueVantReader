@@ -1,14 +1,5 @@
 import request from "../utils/request";
-// import qs from 'qs'
-// export const login=(username,password,vc)=>{
-//   return qs.stringify(request({
-//     method:'POST',
-//     url:'/member/check_login',
-//     username,
-//     password,
-//     vc
-//   }))
-// }
+
 
 // 获取图书分类列表
 export const getCategoryList=()=>{
@@ -72,5 +63,13 @@ export const selectReadStateByUser = (query) =>{
     method:'POST',
     url:`/book/selectReadStateByUser`,
     params:query,
+  })
+}
+
+// 查询图书列表
+export const selectBooks = () =>{
+  return request({
+    method:'GET',
+    url:`/admin/list`
   })
 }
