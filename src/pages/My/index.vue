@@ -11,7 +11,7 @@
         <van-icon name="wap-nav" size="18" />
       </template>
     </van-nav-bar>
-
+<!-- 编辑资料 用户信息等 -->
     <div v-if="user" class="header user-info">
       <div class="base-info">
         <div class="left">
@@ -41,14 +41,15 @@
         </div>
       </div>
     </div>
+    <!-- 未登陆显示内容 -->
     <div v-else class="header not-login">
       <div class="login-btn" @click="$router.push('/login')">
         <img src="~@/assets/logo.png" alt="" />
-        <span class="text">登录/注册</span>
+        <span class="text">登录</span>
       </div>
     </div>
-    <!-- 在读、想读、读过 -->
-    <van-tabs class="menu-read" v-model="active" scrollspy sticky>
+    <!-- 登录显示的主题内容，在读、想读、读过 -->
+    <van-tabs v-if="user" class="menu-read" v-model="active" scrollspy sticky>
       <van-tab title="想读">
         <van-cell title="我想读的书"  />
         <div 
@@ -117,13 +118,29 @@
 
     <!-- <van-cell title="URL 跳转" is-link /> -->
     <van-cell
-      v-if="user"
+      v-if="!user"
       class="logout-cell"
-      @click="onLogout"
-      title="退出登录"
+      title="忘记密码"
       clickable
       is-link
+      to="forget"
     />
+    <van-cell
+      v-if="!user"
+      class="logout-cell"
+      title="注册"
+      clickable
+      is-link
+      to="signIn"
+    />
+    <van-cell
+          v-if="user"
+          class="logout-cell"
+          @click="onLogout"
+          title="退出登录"
+          clickable
+          is-link
+        />
 
     <van-popup
       v-model="show"
@@ -149,7 +166,7 @@
 <script>
 // 从容器里拿数据
 import { mapState } from "vuex";
-import { getUserInfo } from "@/api/user.js";
+import { getUserInfo,logout } from "@/api/user.js";
 import { selectReadStateByUser } from "@/api/book";
 import { selectByMember } from "@/api/evaluate"
 import CommentItemMy from '../../components/comment-item/comment-item-my.vue';
@@ -162,7 +179,7 @@ export default {
   data() {
     return {
       userInfo: {},
-      show: false,
+      show: false,//弹层展示
       active: 2, //粘性tab激活的值
       toRead: 1,
       reading: 2,
@@ -210,6 +227,10 @@ export default {
         this.$toast.fail("获取用户信息失败，请稍后重试！");
       }
     },
+    async toLogout(){
+        const { data } = await logout()
+        console.log(data);
+    },
 
     onLogout() {
       this.$dialog
@@ -217,9 +238,13 @@ export default {
           title: "确认退出嘛？",
           message: "弹窗内容",
         })
-        .then(() => {
+        .then(async() => {
           // on confirm
           console.log("确认");
+        //  this.toLogout()
+        const data =await logout()
+        console.log(data);
+          this.show=false,
           // 确认退出，清楚状态（容器中的user+本地存储）
           this.$store.commit("setUser", null);
           this.toReadBooks.splice(0,this.readingBooks.length)

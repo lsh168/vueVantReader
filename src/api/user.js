@@ -65,3 +65,27 @@ export const updateReadState= params => {
     params
   })
 }
+
+export const createUser= params => {
+  return request({
+    url: '/user/createUser',
+    method: 'POST',
+    params
+  })
+}
+
+
+export const logout= () => {
+  return request({
+    url: '/user/logout',
+    method: 'POST',
+  })
+}
+
+export const forget= params => {
+  return request({
+    url: '/user/forget',
+    method: 'POST',
+    params
+  })
+}

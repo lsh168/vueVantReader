@@ -13,6 +13,25 @@ export default new Router({
       component: () => import ('@/pages/Login')
     },
     {
+      path:'/forget',
+      name:'forget',
+      // 懒加载
+      component: () => import ('@/pages/Forget')
+    },
+    {
+      path:'/signIn',
+      name:'signIn',
+      // 懒加载
+      component: () => import ('@/pages/SignIn')
+    },
+    {
+      path:'/publish',
+      name:'publish',
+      // 懒加载
+      component: () => import ('@/pages/Publish')
+    },
+    
+    {
       path:'/',
       //name:'layout',//如果父路由有默认路由，name没有意义
       component:() =>import('@/pages/Layout'),
@@ -26,6 +45,11 @@ export default new Router({
           path:'/piazza',
           name:'piazza',
           component:() =>import('@/pages/Piazza')
+        },
+        {
+          path:'/gc',
+          name:'gc',
+          component:() =>import('@/pages/Gc')
         },
         {
           path:'/my',//默认子路由

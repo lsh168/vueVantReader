@@ -84,17 +84,20 @@ export default {
       // 请求登录
       try {
         // const res = await login(this.username, this.password, this.verifyCode);
-        const { data } = await getLogin(this.user);
+        const { data } = await getLogin({
+        userName:this.username,
+        password:this.password
+      });
         console.log(data);
-
+        
         console.log("登陆成功！", data.data);
         // data存token
         this.$store.commit('setUser',data.data)
-
-
         this.$toast.success("登陆成功！")
-
         this.$router.back()
+        
+
+        
         // this.$router.push('/login')
       } catch (err) {
         if (err.response.status === 400) {
@@ -111,13 +114,6 @@ export default {
       this.imgCode =
         "http://localhost:8081/verify_code" + "?ts=" + new Date().getTime();
     },
-  },
-  mounted() {
-    // request({
-    //   url:'/verify_code'
-    // }).then(res=>{
-    //   console.log(res);
-    // })
   },
 };
 </script>
