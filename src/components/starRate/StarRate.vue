@@ -1,7 +1,7 @@
 <template>
   <div class="starRate">
     <van-cell-group inset>
-      <van-cell title="书记评分TM">
+      <van-cell title="图书评分TM">
         <div slot="label">
           <van-row type="flex" justify="center">
             <!-- 左评分 -->
@@ -34,8 +34,9 @@
                 :key="index"
                 color="#ffd21e"
                 :show-pivot="false"
-                :percentage="parseInt(value === null ? 0 : value[1])"
+                :percentage="parseInt(value[1])"
               >
+              <!-- :percentage="parseInt(value === null ? 0 : value[1])" -->
               </van-progress>
             </van-col>
           </van-row>
@@ -94,6 +95,7 @@ export default {
         bookId: this.bookDetail.bookId,
       });
       this.scoreStatistics = data.data.scoreStatistics;
+      console.log(data.data);
     },
   },
   created() {

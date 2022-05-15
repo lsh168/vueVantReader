@@ -17,18 +17,24 @@
         <div class="time-text">
           {{ topic.createtime }}
         </div>
-        
       </div>
       <!-- 点赞 -->
       <van-button
         class="like-btn"
         icon="ellipsis"
-        ></van-button
-      >
+        @click="showShare=true"
+      ></van-button>
+      <!-- 删除和分享 -->
+      <van-share-sheet
+        v-model="showShare"
+        title="分享给好友"
+        :options="options"
+        @select="onSelect"
+      />
     </div>
     <!-- 话题内容 -->
     <div slot="label">
-      <p class="comment-content">{{ topic.content }}</p>
+      <p v-html="topic.content" class="comment-content"></p>
       <div class="bottom-info">
         <!-- <span class="comment-pubdate">{{
           topic.createtime | relativeTime
@@ -37,32 +43,33 @@
       </div>
       <div>
         <van-button
-        class="bottom-btn-o"
-        icon="share-o"
-        width="200px"
-        ></van-button
-      >
-      <van-button
-        class="bottom-btn"
-        icon="chat-o"
-        ></van-button
-      >
-      <van-button
-        class="bottom-btn"
-        icon="like-o"
-        ></van-button
-      >
+          class="bottom-btn-o"
+          icon="share-o"
+          width="200px"
+        ></van-button>
+        <van-button class="bottom-btn" icon="chat-o"></van-button>
+        <van-button class="bottom-btn" icon="like-o"></van-button>
       </div>
     </div>
   </van-cell>
 </template>
 
 <script>
-// import { addEnjoy } from "@/api/user.js";
+import { removeTopic } from "@/api/topic.js";
 export default {
   data() {
     return {
       isLiking: false,
+      showShare:false,
+      options: [
+        [
+          { name: '微信', icon: 'wechat' },
+          { name: '朋友圈', icon: 'wechat-moments' },
+          { name: 'QQ', icon: 'qq' },
+          { name: '删除', icon: 'https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fimages.669pic.com%2Felement_pic%2F6%2F16%2F71%2F70%2F94fa6795f9dbbed993259599c57c04ac.jpg&refer=http%3A%2F%2Fimages.669pic.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1654693560&t=2b6a4f9b95f22408be8e2dd35a50c8d5' },
+          
+        ],
+      ],
     };
   },
   props: {
@@ -73,6 +80,22 @@ export default {
   },
   computed: {},
   methods: {
+    // 
+    onSelect(option,index) {
+      if (index===3) {
+        this.toRemoveTopic()
+      }
+
+      console.log(option);
+      console.log(index);
+      this.$toast(option.name);
+      this.showShare = false;
+    },
+    async toRemoveTopic() {
+      const { data } = await removeTopic({ id: this.topic.id });
+      console.log(data);
+      this.$emit("loadTopic")
+    },
     // async clickEnjoy() {
     //   const { data } = await addEnjoy({
     //     evaluationId: this.evaluation.evaluationId,
@@ -101,12 +124,12 @@ export default {
     .user-name {
       color: #406599;
       font-size: 26px;
-      .username-text{
+      .username-text {
         color: rgb(78, 78, 78);
         font-size: 32px;
         line-height: 50px;
       }
-      .time-text{
+      .time-text {
         color: #c3c3c3;
         line-height: 26px;
       }
@@ -139,7 +162,7 @@ export default {
     width: 60px;
     border: 0;
   }
-  .bottom-btn-o{
+  .bottom-btn-o {
     height: 30px;
     width: 60px;
     border: 0;

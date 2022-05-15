@@ -36,6 +36,8 @@
 <script>
 import { uploadFiles, insertTopic } from "@/api/topic";
 export default {
+  name:'publish',
+  components:{},
   data() {
     return {
       text: "",
@@ -44,6 +46,8 @@ export default {
       imgName: null,
       uploadImage: [],
       imgsUrl: [],
+      newTopic:{}
+      
     };
   },
   methods: {
@@ -81,39 +85,44 @@ export default {
       str = `<div class="content-img"><p>${this.text}</p>${strImg}</div>`;
       console.log(str);
 
-      const { data } = await insertTopic({ content: str });
-      console.log(data);
+      const  {data}  = await insertTopic({ content: str });
+      this.newTopic=data.data
+      console.log('90',this.newTopic);
     },
     async uploadFile() {
       if (this.uploadImage && this.uploadImage.length) {
         // this.btnLoading = true;
         const params = new FormData();
         this.uploadImage.forEach((item) => {
-          console.log("遍历", item);
+          // console.log("遍历", item);
           params.append("files", item, item.name);
         });
         const { data } = await uploadFiles(params);
+        
         this.imgsUrl = data.imgsUrl;
         this.handlerTextAndImg();
       }
+      
      
     },
-   
+  //  取消
     onClickLeft() {
-      // this.$toast("返回");
-      // this.$router.back();
-      this.$router.push({ name: "gc" });
+      this.$emit("oncancel",null)
     },
+    // 发布内容
     onClickRight() {
-      // this.$toast("按钮");
+     this.uploadFile()
+    //  this.newTopic=data.data   
+    // 变化时，执行监视处理函数
 
-      // this.handlerTextAndImg();
-      this.uploadFile();
-      this.$toast("发布成功！");
-
-      this.$router.push({ name: "gc" });
-      
     },
+  },
+  watch:{
+    newTopic:{
+      handler(val){
+        this.$emit("oncancel", val)
+      }
+    }
   },
   created() {},
   mounted() {},

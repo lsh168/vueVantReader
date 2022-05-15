@@ -56,7 +56,7 @@ export default {
   color: #fff;
   text-align: center;
   padding-top: 80px;
-  background-image: url("https://img1.doubanio.com/view/activity_page/raw/public/5279.jpg");
+  background-image: url("http://localhost:8866/images/13.jpg");
   opacity: 0.9;
 }
 }

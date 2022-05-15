@@ -23,12 +23,11 @@
         to="/search"
         >搜索</van-button
       > -->
-        <van-icon name="search" size="18" />
+        <!-- <van-icon name="search" size="18" /> -->
       </template>
     </van-nav-bar>
-    <!-- 便签 -->
-
-    <scrollbar :labelList="labelList" />
+    <!-- 标签 -->
+    <!-- <scrollbar :labelList="labelList" /> -->
 
     <!-- topic -->
     <div>
@@ -36,28 +35,50 @@
         v-for="(item, index) in topicList"
         :key="index"
         :topic="item"
+        @loadTopic="loadTopic"
       />
     </div>
+    <van-popup v-model="show" position="top" :style="{ height: '100%' }">
+      <publish @oncancel="onCancel"  />
+    </van-popup>
   </div>
 </template>
 
 <script>
 import TopicItem from "../../components/topic/Topic-item.vue";
 import { getTopicList, getLabelList } from "@/api/topic";
-import Scrollbar from "../../components/Scrollbar/scrollbar.vue";
+// import Scrollbar from "../../components/Scrollbar/scrollbar.vue";
+import Publish from "../../components/Publish/publish.vue";
 export default {
   components: {
     TopicItem,
-    Scrollbar,
+    // Scrollbar,
+    Publish,
   },
   data() {
     return {
       topicList: [],
       labelList: [],
+      show: false,
     };
   },
   computed: {},
   methods: {
+    onCancel(data) {
+      this.show = false;
+      
+      console.log('71',data);
+      if (data) {
+        this.topicList.unshift(data)
+      }
+      this.toGetTopicList();
+      
+    },
+   
+    // 删除后重新加载topic列表
+    loadTopic() {
+      this.toGetTopicList();
+    },
     async toGetTopicList() {
       const { data } = await getTopicList();
       this.topicList = data.data;
@@ -68,12 +89,14 @@ export default {
       this.labelList = data.data;
       console.log(data.data);
     },
-    onClickPublish(){
-      this.$router.push({ 
-        name: 'publish', 
-        // params: { username: 'eduardo' } 
-        })
-    }
+    onClickPublish() {
+      this.show = true;
+      // this.$router.push({
+      //   name: 'publish',
+      //   // params: { username: 'eduardo' }
+      // })
+    },
+    onClickSearch() {},
   },
   created() {},
   mounted() {

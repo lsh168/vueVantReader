@@ -10,13 +10,13 @@
         <span class="text">首页</span>
       </van-tabbar-item>
       <van-tabbar-item to="/piazza">
-        <i slot="icon" class="reader reader-shouye"></i>
+        <i slot="icon" class="reader reader-paixingbang"></i>
         <!-- <i slot="icon" class="bar-chart-o"></i> -->
         <!-- <van-icon name="bar-chart-o" /> -->
         <span class="text">排行榜</span>
       </van-tabbar-item>
       <van-tabbar-item to="/gc">
-        <i slot="icon" class="reader reader-shouye"></i>
+        <i slot="icon" class="reader reader-iconfontguangchang"></i>
         <span class="text">广场</span>
       </van-tabbar-item>
       <van-tabbar-item to="/my">
