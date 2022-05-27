@@ -36,11 +36,19 @@
         :key="index"
         :topic="item"
         @loadTopic="loadTopic"
+        @showReplyPopup="showReplyPopup"
       />
     </div>
     <van-popup v-model="show" position="top" :style="{ height: '100%' }">
       <publish @oncancel="onCancel"  />
     </van-popup>
+    <van-popup 
+    v-model="replyShow" 
+    round position="bottom" 
+    :style="{ height: '30%' }"
+    
+     />
+    
   </div>
 </template>
 
@@ -60,10 +68,15 @@ export default {
       topicList: [],
       labelList: [],
       show: false,
+      replyShow: false
     };
   },
   computed: {},
   methods: {
+    showReplyPopup(topic){
+      console.log(topic);
+      this.replyShow=true
+    },
     onCancel(data) {
       this.show = false;
       
@@ -108,6 +121,8 @@ export default {
 <style scoped lang="less">
 .gc {
   padding-top: 95px;
+  padding-bottom: 100px;
+  
   .search-btn {
     width: 180px;
     height: 64px;

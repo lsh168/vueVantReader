@@ -36,9 +36,9 @@
     <div slot="label">
       <p v-html="topic.content" class="comment-content"></p>
       <div class="bottom-info">
-        <!-- <span class="comment-pubdate">{{
+        <span class="comment-pubdate">{{
           topic.createtime | relativeTime
-        }}</span> -->
+        }}</span>
         <!-- <van-button class="reply-btn" round>回复0</van-button> -->
       </div>
       <div>
@@ -46,19 +46,32 @@
           class="bottom-btn-o"
           icon="share-o"
           width="200px"
+          @click="showShare=true"
         ></van-button>
-        <van-button class="bottom-btn" icon="chat-o"></van-button>
-        <van-button class="bottom-btn" icon="like-o"></van-button>
+        <!-- 评论按钮 -->
+        <!-- <van-button class="bottom-btn" icon="chat-o" @click="showReplyPopup(topic)" >{{topic.reply}}</van-button> -->
+        <!-- <van-icon class="bottom-btn" name="chat-o" @click="clickEnjoy" /> -->
+        <van-button 
+        class="bottom-btn" 
+        :icon="isRed===false?'like-o' : 'like'" 
+        :class="{textColor:isRed}" 
+        :disabled="isRed"
+        @click="toEnjoy">
+          {{topic.thumbup}}
+          </van-button>
       </div>
     </div>
+    
   </van-cell>
 </template>
 
 <script>
-import { removeTopic } from "@/api/topic.js";
+import { removeTopic,updateTopicEnjoy } from "@/api/topic.js";
 export default {
   data() {
     return {
+      show:false,
+      isRed:false,//控制点赞颜色
       isLiking: false,
       showShare:false,
       options: [
@@ -70,6 +83,7 @@ export default {
           
         ],
       ],
+      color:'red'
     };
   },
   props: {
@@ -80,6 +94,24 @@ export default {
   },
   computed: {},
   methods: {
+    showReplyPopup(item){
+      console.log(item);
+      
+      this.$emit("showReplyPopup",item)
+    },
+    clickEnjoy(){
+      this.isRed=true
+      console.log(123);
+    },
+    async toEnjoy(){
+      const { data }=await updateTopicEnjoy({
+        id:this.topic.id,
+        thumbup:this.topic.thumbup
+      })
+      console.log(data);
+      this.isRed=true
+      this.topic.thumbup=this.topic.thumbup+1
+    },
     // 
     onSelect(option,index) {
       if (index===3) {
@@ -175,6 +207,10 @@ export default {
     font-size: 32px;
     float: right;
     margin-left: 30px;
+  }
+  .textColor{
+    color: red;
+
   }
 }
 </style>

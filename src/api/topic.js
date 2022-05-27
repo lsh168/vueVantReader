@@ -32,6 +32,13 @@ export const removeTopic=params=>{
   })
 }
 
+export const updateTopicEnjoy=params=>{
+  return request({
+    method:'post',
+    url:'/topic/enjoy',
+    params
+  })
+}
 
 
 // label接口

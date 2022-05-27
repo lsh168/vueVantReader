@@ -50,7 +50,7 @@
         <div class="category-item">
           <div class="content-wrapper">
             <div class="title title-medium">年度读书榜单</div>
-            <div class="num sub-title-tiny">{{data.yearBooks.length}}本书</div>
+            <div class="num sub-title-tiny">{{ data.yearBooks.length }}本书</div>
           </div>
           <div class="img-wrapper">
             <div class="img-group">
@@ -74,6 +74,7 @@ export default {
   },
   data() {
     return {
+      
     };
   },
   props: {

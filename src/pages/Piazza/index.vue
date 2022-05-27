@@ -84,6 +84,7 @@ export default {
   mounted() {
     this.toSelectHotBooks();
     this.getRankingBooks();
+    console.log(this.rankingBooks);
   },
 };
 </script>
